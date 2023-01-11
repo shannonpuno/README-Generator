@@ -1,0 +1,22 @@
+{
+  "name": "readme-generator",
+  "version": "1.0.0",
+  "description": "Generates a professional readme from user's input.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shannonpuno/README-Generator.git"
+  },
+  "author": "Shannon Puno",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/shannonpuno/README-Generator/issues"
+  },
+  "homepage": "https://github.com/shannonpuno/README-Generator#readme",
+  "dependencies": {
+    "inquirer": "^8.2.4"
+  }
+}
