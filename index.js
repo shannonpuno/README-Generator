@@ -1,12 +1,11 @@
 // TODO: Include packages needed for this application
 let inquirer = require('inquirer');
 let fs = require('fs');
-const generateMarkdown = require('./Develop/utils/generateMarkdown');
+const generateMarkdown = require('./utils/generateMarkdown');
 const util = require('util');
 
 // TODO: Create an array of questions for user input
-function promptUser() {
-    return inquirer.prompt([
+const questions = [
         {
             type:'input',
             name: 'title',
@@ -14,17 +13,17 @@ function promptUser() {
         },
         {
             type:'input',
-            name: 'describe-what',
+            name: 'describeProject',
             message: 'What is your project?',
         },
         {
             type:'input',
-            name: 'describe-motivation',
+            name: 'describeMotivation',
             message: 'What was your motivation to make the project?',
         },
         {
             type:'input',
-            name: 'describe-problem',
+            name: 'describeProblem',
             message: 'What problem does your project solve?',
         },
         {
@@ -52,19 +51,7 @@ function promptUser() {
             name: 'test',
             message: 'Please provide instructions on how to test and run your project.',
         },
-        {
-            type:'confirm',
-            name: 'confirmlicense',
-            message: 'Will you be needing a license for the project?',
-            when: ({confirmlicense}) => {
-                if (confirmlicense) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        },
-        { //if user confirms
+        { 
             type:'list',
             name: 'license',
             message: 'Please select the license.',
@@ -72,16 +59,28 @@ function promptUser() {
                 'mit',
                 'apache-2.0',
                 'gpl-2.0',
-                'mpl-2.0'
+                'mpl-2.0',
+                'none'
             ]
+        },
+        {
+            type: 'input',
+            name: 'username',
+            message: 'Please enter your GitHub username.',
+        },
+        {
+            type: 'input',
+            name: 'email',
+            message: 'Please enter your email.',
         }
-    ]);
-}
+
+    ];
+
 
 
 // TODO: Create a function to write README file
 function writeToFile(fileName, data) {
-    fs.writeFile(fileName, data, (err) => {
+    fs.writeFile(fileName, generateMarkdown(data), function (err) {
         if(err){
             return console.log(err);
         }
@@ -89,18 +88,15 @@ function writeToFile(fileName, data) {
     });
 }
 
-const asyncWriteToFile = util.promisify(writeToFile);
+
 
 // TODO: Create a function to initialize app
 async function init() {
-    try{
-        const userAns = await promptUser();
-        const markdown = generateMarkdown(userAns);
-        await asyncWriteToFile("users-README.md", markdown);
-    }catch (err) {
-        throw err;
-    }
-
+    inquirer.prompt(questions)
+    .then(function (answers) {
+        console.log(answers);
+        writeToFile(`${answers.title}.md`, answers)
+    });
 }
 
 // Function call to initialize app
